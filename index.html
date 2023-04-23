@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewHeaven</title>
+    <script src="https://kit.fontawesome.com/13b485848c.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyAT8wjZJkiP24c9Nd9OjhaPxG6NDYQNz6E",
+            authDomain: "shivam-pai.firebaseapp.com",
+            databaseURL: "https://shivam-pai-default-rtdb.firebaseio.com",
+            projectId: "shivam-pai",
+            storageBucket: "shivam-pai.appspot.com",
+            messagingSenderId: "607527916758",
+            appId: "1:607527916758:web:452ebd0e3b8cea0affe577",
+            measurementId: "G-6C046LF1F9"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"
+        integrity="sha512-dQIiHSl2hr3NWKKLycPndtpbh5iaHLo6MwrXm7F0FM5e+kL2U16oE9uIwPHUl6fQBeCthiEuV/rzP3MiAB8Vfw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body style="background-color: #feedd7;">
+    <center>
+        <img src="Background.png" style="height: 672px;" alt="">
+    </center>
+    <h3 id="chose"></h3>
+    <div id="cam-holder" style="display: flex;position: absolute;z-index: 1;top: 115px;left: 125px;">
+        <div id="my_camera"></div>
+    </div>
+    <div id="options" style="display: flex;position: absolute;z-index: 1;top: 115px;left: 885px;right: 50px ;">
+        <section id="screen1" class="w-100">
+            <ol class="list-group list-group-numbered w-100 " style="cursor: pointer;">
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(1,0)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Latte</div>
+                        A Coffee
+                    </div>
+                    <span class="badge bg-primary rounded-pill">Starts from ₹30</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(1,1)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Tea</div>
+                        Indian Masala Tea
+                    </div>
+                    <span class="badge bg-primary rounded-pill">Starts from ₹25</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(1,2)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Cappuccino</div>
+                        A Coffee
+                    </div>
+                    <span class="badge bg-primary rounded-pill">Starts from ₹40</span>
+                </li>
+            </ol>
+        </section>
+        <section id="screen2" class="w-100" style="display: none;" name="tea">
+            <ol class="list-group list-group-numbered w-100 " style="cursor: pointer;">
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(2,0)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Small cup of tea</div>
+                        Nearly 100mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹25</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(2,1)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Medium cup of tea</div>
+                        Nearly 250mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹30</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(2,2)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Large cup of tea</div>
+                        Nearly 400mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹35</span>
+                </li>
+            </ol>
+        </section>
+        <section id="screen3" class="w-100" style="display: none;" name="latte">
+            <ol class="list-group list-group-numbered w-100 " style="cursor: pointer;">
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(3,0)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Small cup of Latte</div>
+                        Nearly 100mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹30</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(3,1)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Medium cup of Latte</div>
+                        Nearly 250mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹50</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(3,2)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Large cup of Latte</div>
+                        Nearly 400mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹70</span>
+                </li>
+            </ol>
+        </section>
+        <section id="screen7" class="w-100" style="display: none;" name="cappuccino">
+            <ol class="list-group list-group-numbered w-100 " style="cursor: pointer;">
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(7,0)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Small cup of Cappuccino</div>
+                        Nearly 100mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹40</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(7,1)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Medium cup of Cappuccino</div>
+                        Nearly 250mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹60</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start" onclick="choose(7,2)">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Large cup of Cappuccino</div>
+                        Nearly 400mL
+                    </div>
+                    <span class="badge bg-primary rounded-pill">₹80</span>
+                </li>
+            </ol>
+        </section>
+        <section id="screen4" class="w-100" style="display: none;" name="confirm">
+            <center>
+                <h3>Confirm Order?</h3>
+            </center>
+            <div class="btn-group w-100">
+                <button class="btn btn-lg btn-success w-50" onclick="confirmOrder()">
+                    <i class="fa-solid fa-check"></i>&nbsp;Yes
+                </button>
+                <button class="btn btn-lg btn-danger w-50" onclick="location.reload()">
+                    <i class="fa-solid fa-xmark"></i>&nbsp;No
+                </button>
+            </div>
+        </section>
+        <section id="screen5" class="w-100" style="display: none;" name="">
+            <center>
+                <h3>Pay Using...</h3>
+            </center>
+            <div class="list-group" style="cursor: pointer;">
+                <li onclick="choose(5,0)" class="list-group-item list-group-item-action">UPI</li>
+                <!-- <li onclick="choose(5,1)" class="list-group-item list-group-item-action">Debit/Credit Card</li>
+                <li onclick="choose(5,2)" class="list-group-item list-group-item-action">BrewHeaven Tap</li> -->
+            </div>
+        </section>
+        <section id="screen6" class="w-100" style="display: none;" name="pay_UPI">
+            <center>
+                <h3>Pay Using UPI</h3>
+                <hr>
+                <div id="upi-qrcode" src="" alt=""></div>
+                <hr>
+                <h4>Please scan this QR Code using your QR code scanner / camera</h4>
+            </center>
+        </section>
+        <section id="screen8" class="w-100" style="display: none;" name="pay_DebitCard"></section>
+        <section id="screen9" class="w-100" style="display: none;" name="pay_tap"></section>
+        <section id="screen10" class="w-100" style="display: none;" name="loader">
+            <div class="w-100">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </section>
+        <section id="screen11" class="w-100" style="display: none;" name="final">
+            <center>
+                <h3>Please Pick Your Order!!</h3>
+            </center>
+            <button class="btn btn-dark w-100" onclick="location.reload()">Order Again</button>
+        </section>
+    </div>
+    <section id="price-bar" class="d-flex justify-content-between"
+        style="display: flex;position: absolute;z-index: 1;bottom: 0px;padding: 5px;left: 885px;right: 10px;">
+        <h3>Total Price : ₹<span id="totalPrice">0</span></h3>
+    </section>
+    <iframe src="aimodel.html" hidden frameborder="0"></iframe>
+</body>
+<audio src="paytm_payment_tune.mp3" id="ringtone"></audio>
+<script>
+    var qrcode = new QRCode("upi-qrcode");
+    Webcam.set({
+        width: 640,
+        height: 470,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+        flip_horiz: true
+    });
+    Webcam.attach('#my_camera');
+    setInterval(function(){
+        document.getElementById('chose').innerHTML = sessionStorage.getItem('classify-class')
+    }, 100)
+    function choose(screenNo, optionNumber) {
+        if (screenNo == 1) {
+            if (optionNumber == 0) {
+                document.getElementById('screen1').style.display = 'none'
+                document.getElementById('screen3').style.display = 'block'
+            }
+            if (optionNumber == 1) {
+                document.getElementById('screen1').style.display = 'none'
+                document.getElementById('screen2').style.display = 'block'
+            }
+            if (optionNumber == 2) {
+                document.getElementById('screen1').style.display = 'none'
+                document.getElementById('screen7').style.display = 'block'
+            }
+        }
+        else if (screenNo == 2) {
+            if (optionNumber == 0) {
+                totalPrice = 25
+                product = 'Small Tea'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen2').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+
+            if (optionNumber == 1) {
+                totalPrice = 30
+                product = 'Medium Tea'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen2').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+
+            if (optionNumber == 2) {
+                totalPrice = 35
+                product = 'Large Tea'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen2').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+        }
+        else if (screenNo == 3) {
+            if (optionNumber == 0) {
+                totalPrice = 30
+                product = 'Small Latte'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen3').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+            if (optionNumber == 1) {
+                totalPrice = 50
+                product = 'Medium Latte'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen3').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+            if (optionNumber == 2) {
+                totalPrice = 70
+                product = 'Large Latte'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen3').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+        }
+        else if (screenNo == 4) {
+            document.getElementById('screen2').style.display = 'none'
+            document.getElementById('screen4').style.display = 'block'
+
+        }
+        else if (screenNo == 7) {
+            if (optionNumber == 0) {
+                totalPrice = 40
+                product = 'Small Cappuccino'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen7').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+            if (optionNumber == 1) {
+                totalPrice = 60
+                product = 'Medium Cappuccino'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen7').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+            if (optionNumber == 2) {
+                totalPrice = 80
+                product = 'Large Cappuccino'
+                document.getElementById('totalPrice').innerHTML = totalPrice
+                document.getElementById('screen7').style.display = 'none'
+                document.getElementById('screen4').style.display = 'block'
+            }
+        }
+        else if (screenNo == 5) {
+            if (optionNumber == 0) {
+                document.getElementById('screen5').style.display = 'none'
+                document.getElementById('screen6').style.display = 'block'
+                time = new Date()
+                qrcode.makeCode('http://192.168.29.6:5501/pay/upi/?value=' + totalPrice + '&id=' + Number(time));
+                firebase.database().ref('brewHeaven/pay/upi/' + Number(time)).set({
+                    active: false,
+                    payed: false
+                })
+                firebase.database().ref('brewHeaven/pay/upi/' + Number(time) + '/payed').on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data == true) {
+                        //Motor Pump
+                        document.getElementById('screen6').style.display = 'none'
+                        document.getElementById('screen10').style.display = 'block'
+                        setTimeout(function () {
+                            document.getElementById('screen10').style.display = 'none'
+                            document.getElementById('screen11').style.display = 'block'
+                        }, 2000)
+                    }
+                })
+            }
+            if (optionNumber == 1) {
+                document.getElementById('screen5').style.display = 'none'
+                document.getElementById('screen8').style.display = 'block'
+            }
+            if (optionNumber == 2) {
+                document.getElementById('screen5').style.display = 'none'
+                document.getElementById('screen9').style.display = 'block'
+            }
+        }
+    }
+    function confirmOrder() {
+        document.getElementById('screen4').style.display = 'none'
+        document.getElementById('screen5').style.display = 'block'
+    }
+    function textToSpeech(speakdata) {
+        var synth = window.speechSynthesis;
+        var utter = new SpeechSynthesisUtterance(speakdata);
+        synth.speak(utter);
+    }
+</script>
+
+</html>

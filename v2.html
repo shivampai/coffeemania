@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewHeaven</title>
+    <script src="https://kit.fontawesome.com/13b485848c.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyAT8wjZJkiP24c9Nd9OjhaPxG6NDYQNz6E",
+            authDomain: "shivam-pai.firebaseapp.com",
+            databaseURL: "https://shivam-pai-default-rtdb.firebaseio.com",
+            projectId: "shivam-pai",
+            storageBucket: "shivam-pai.appspot.com",
+            messagingSenderId: "607527916758",
+            appId: "1:607527916758:web:452ebd0e3b8cea0affe577",
+            measurementId: "G-6C046LF1F9"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"
+        integrity="sha512-dQIiHSl2hr3NWKKLycPndtpbh5iaHLo6MwrXm7F0FM5e+kL2U16oE9uIwPHUl6fQBeCthiEuV/rzP3MiAB8Vfw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body style="background-color: #feedd7;">
+    <section id="screen6" class="w-100" style="display: block;" name="pay_UPI">
+        <center>
+            <h3>Pay ₹<span id="amt"></span> Using UPI</h3>
+            <hr>
+            <div id="upi-qrcode" src="" alt=""></div>
+            <hr>
+            <h4>Please scan this QR Code using your QR code scanner / camera</h4>
+        </center>
+    </section>
+    <section id="screen10" style="display: none;">
+
+        <h3></h3>
+    </section>
+    </div>
+</body>
+<audio src="paytm_payment_tune.mp3" id="ringtone"></audio>
+<script>
+        var qrcode = new QRCode("upi-qrcode");
+    params = new URL(document.location).searchParams
+    totalPrice = params.get('p')
+    document.getElementById('amt').innerHTML = totalPrice
+    time = new Date()
+    qrcode.makeCode('http://192.168.29.6:5501/pay/upi/?value=' + totalPrice + '&id=' + Number(time));
+    firebase.database().ref('brewHeaven/pay/upi/' + Number(time)).set({
+        active: false,
+        payed: false
+    })
+    firebase.database().ref('brewHeaven/pay/upi/' + Number(time) + '/payed').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data == true) {
+            //Motor Pump
+            document.getElementById('screen6').style.display = 'none'
+            document.getElementById('screen10').style.display = 'block'
+        }
+    })
+</script>
+
+</html>
