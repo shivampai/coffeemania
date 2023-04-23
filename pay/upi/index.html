@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewHeaven</title>
+    <script src="https://kit.fontawesome.com/13b485848c.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyAT8wjZJkiP24c9Nd9OjhaPxG6NDYQNz6E",
+            authDomain: "shivam-pai.firebaseapp.com",
+            databaseURL: "https://shivam-pai-default-rtdb.firebaseio.com",
+            projectId: "shivam-pai",
+            storageBucket: "shivam-pai.appspot.com",
+            messagingSenderId: "607527916758",
+            appId: "1:607527916758:web:452ebd0e3b8cea0affe577",
+            measurementId: "G-6C046LF1F9"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"
+        integrity="sha512-dQIiHSl2hr3NWKKLycPndtpbh5iaHLo6MwrXm7F0FM5e+kL2U16oE9uIwPHUl6fQBeCthiEuV/rzP3MiAB8Vfw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body style="background-color: #fff;" onload="load()">
+    <section id="screen1" style="display: block;">
+        <input type="text" autocomplete="name" class="form-control" id="name" placeholder="Your Name">
+        <input type="text" autocomplete="name" class="form-control" id="email" placeholder="Email ID">
+        <center><button class="btn btn-dark w-50" onclick="next()">Next</button></center>
+    </section>
+    <section id="screen2" style="display: none;justify-content: center;align-items: center;">
+        <div>
+            <h4>Pay</h4>
+            <h3>₹<span id="price"></span></h3>
+            <div>
+                <hr>
+                <div>
+                    <button class="btn btn-lg btn-dark" onclick="pay()">Pay</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="screen3" style="background-repeat: no-repeat;height: 100vh;display:none;">
+        <img src="payment_success.png" id="canvas-src" style="height: 100vh;">
+        <canvas id="canvas" height="1280" width="876" hidden></canvas>
+    </section>
+</body>
+<audio src="paytm_payment_tune.mp3" id="ringtone"></audio>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+</script>
+
+<script>
+   (function(){
+      emailjs.init("user_vImdHAsdxYJQ5zzzGAqEM");
+   })();
+
+    function load() {
+        params = new URL(document.location).searchParams
+        value = params.get('value')
+        id = params.get('id')
+        firebase.database().ref('brewHeaven/pay/upi/' + id).once('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (data.active == false) {
+                    document.getElementById('price').innerHTML = value;
+                } else {
+                    document.write('Broken URL!')
+                }
+            } else {
+                document.write('Broken URL!')
+            }
+        })
+    }
+    function next() {
+        name = document.getElementById('name').value;
+        email = document.getElementById('email').value;
+        document.getElementById('screen1').style.display = 'none';
+        document.getElementById('screen2').style.display = 'flex';
+    }
+    function pay() {
+        setTimeout(function () {
+            firebase.database().ref('brewHeaven/pay/upi/' + id).set({
+                active: true,
+                payed: true
+            })
+        }, 1000)
+        document.getElementById('screen2').style.display = 'none';
+        document.getElementById('screen3').style.display = 'block';
+
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var img = document.getElementById("canvas-src");
+        ctx.drawImage(img, 0, 0);
+        ctx.font = '600 75px Arial';
+        ctx.fillText("₹"+value, 325, 400);
+        document.getElementById("canvas-src").src = canvas.toDataURL();
+        document.getElementById('ringtone').play()
+
+    }
+</script>
+
+</html>
