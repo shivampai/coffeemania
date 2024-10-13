@@ -310,7 +310,7 @@
                 document.getElementById('screen5').style.display = 'none'
                 document.getElementById('screen6').style.display = 'block'
                 time = new Date()
-                qrcode.makeCode('http://192.168.29.6:5501/pay/upi/?value=' + totalPrice + '&id=' + Number(time));
+                qrcode.makeCode('https://shivampai.github.io/coffeemania/pay/upi/?value=' + totalPrice + '&id=' + Number(time));
                 firebase.database().ref('brewHeaven/pay/upi/' + Number(time)).set({
                     active: false,
                     payed: false
